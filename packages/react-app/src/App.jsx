@@ -1,5 +1,4 @@
 import { Button, Col, Menu, Row } from "antd";
-
 import "antd/dist/antd.css";
 import {
   useBalance,
@@ -30,8 +29,9 @@ import externalContracts from "./contracts/external_contracts";
 // contracts
 import deployedContracts from "./contracts/hardhat_contracts.json";
 import { getRPCPollTime, Transactor, Web3ModalSetup } from "./helpers";
-import { Home, ExampleUI, Hints, Subgraph } from "./views";
-import { useStaticJsonRPC } from "./hooks";
+import { Home, ExampleUI, Hints, Subgraph, FrontPage  } from "./views";
+// import { CreateTransaction, Transactions, Owners,  } from "./views";
+import { useStaticJsonRPC, useEventListener } from "./hooks";
 
 const { ethers } = require("ethers");
 /*
@@ -157,6 +157,18 @@ function App(props) {
   // If you want to make 🔐 write transactions to your contracts, use the userSigner:
   const writeContracts = useContractLoader(userSigner, contractConfig, localChainId);
 
+  const contractName = "MultiSig";
+
+  // 📟 Listen for broadcast events
+  const executeTransactionEvents = useEventListener(
+    readContracts,
+    contractName,
+    "Execute",
+    localProvider,
+    1,
+  );
+  if (DEBUG) console.log("📟 executeTransactionEvents:", executeTransactionEvents);
+
   // EXTERNAL CONTRACT EXAMPLE:
   //
   // If you want to bring in the mainnet DAI contract it would look like:
@@ -177,7 +189,7 @@ function App(props) {
   );
 
   // keep track of a variable from the contract in the local React state:
-  const purpose = useContractReader(readContracts, "YourContract", "purpose", [], localProviderPollingTime);
+  const purpose = useContractReader(readContracts, "MultiSig", "purpose", [], localProviderPollingTime);
 
   /*
   const addressFromENS = useResolveName(mainnetProvider, "austingriffith.eth");
@@ -300,6 +312,9 @@ function App(props) {
         <Menu.Item key="/">
           <Link to="/">App Home</Link>
         </Menu.Item>
+        <Menu.Item key="/frontPage">
+          <Link to="/frontPage">Front Page</Link>
+        </Menu.Item>
         <Menu.Item key="/debug">
           <Link to="/debug">Debug Contracts</Link>
         </Menu.Item>
@@ -322,6 +337,17 @@ function App(props) {
           {/* pass in any web3 props to this Home component. For example, yourLocalBalance */}
           <Home yourLocalBalance={yourLocalBalance} readContracts={readContracts} />
         </Route>
+        <Route exact path="/frontPage">
+          <FrontPage
+            executeTransactionEvents={executeTransactionEvents}
+            contractName={contractName}
+            localProvider={localProvider}
+            readContracts={readContracts}
+            price={price}
+            mainnetProvider={mainnetProvider}
+            blockExplorer={blockExplorer}
+          />
+        </Route>
         <Route exact path="/debug">
           {/*
                 🎛 this scaffolding is full of commonly used components
@@ -330,7 +356,7 @@ function App(props) {
             */}
 
           <Contract
-            name="YourContract"
+            name="MultiSig"
             price={price}
             signer={userSigner}
             provider={localProvider}
