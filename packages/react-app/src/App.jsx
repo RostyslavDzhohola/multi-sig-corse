@@ -29,9 +29,9 @@ import externalContracts from "./contracts/external_contracts";
 // contracts
 import deployedContracts from "./contracts/hardhat_contracts.json";
 import { getRPCPollTime, Transactor, Web3ModalSetup } from "./helpers";
-import { Home, ExampleUI, Hints, Subgraph, FrontPage  } from "./views";
+import { Home, ExampleUI, Hints, Subgraph, FrontPage, Owners, CreateTransaction } from "./views";
 // import { CreateTransaction, Transactions, Owners,  } from "./views";
-import { useStaticJsonRPC, useEventListener } from "./hooks";
+import { useStaticJsonRPC, useEventListener, useUserProvider } from "./hooks";
 
 const { ethers } = require("ethers");
 /*
@@ -118,6 +118,8 @@ function App(props) {
   /* 🔥 This hook will get the price of Gas from ⛽️ EtherGasStation */
   const gasPrice = useGasPrice(targetNetwork, "fast", localProviderPollingTime);
   // Use your injected provider from 🦊 Metamask or if you don't have it then instantly generate a 🔥 burner wallet.
+  const userProvider = useUserProvider(injectedProvider, localProvider);
+
   const userProviderAndSigner = useUserProviderAndSigner(injectedProvider, localProvider, USE_BURNER_WALLET);
   const userSigner = userProviderAndSigner.signer;
 
@@ -191,6 +193,15 @@ function App(props) {
   // keep track of a variable from the contract in the local React state:
   const purpose = useContractReader(readContracts, "MultiSig", "purpose", [], localProviderPollingTime);
 
+  // 📟 Listen for owner events
+  const ownerAddedEvents = useEventListener(readContracts, contractName, "OwnerAdded", localProvider, 1);
+  if (DEBUG) console.log("📟 ownerEvents:", ownerAddedEvents);
+  const ownerRemovedEvents = useEventListener(readContracts, contractName, "OwnerRemoved", localProvider, 1);
+  if (DEBUG) console.log("📟 ownerEvents:", ownerRemovedEvents);
+
+  // Keep the number of required signatures up to date
+  const signaturesRequired = useContractReader(readContracts, contractName, "sigRequired");
+  if (DEBUG) console.log("✳️ signaturesRequired:", signaturesRequired);
   /*
   const addressFromENS = useResolveName(mainnetProvider, "austingriffith.eth");
   console.log("🏷 Resolved austingriffith.eth as:", addressFromENS)
@@ -264,6 +275,11 @@ function App(props) {
     }
   }, [loadWeb3Modal]);
 
+  const [route, setRoute] = useState();
+  useEffect(() => {
+    setRoute(window.location.pathname);
+  }, [setRoute]);
+
   const faucetAvailable = localProvider && localProvider.connection && targetNetwork.name.indexOf("local") !== -1;
 
   return (
@@ -315,6 +331,12 @@ function App(props) {
         <Menu.Item key="/frontPage">
           <Link to="/frontPage">Front Page</Link>
         </Menu.Item>
+        <Menu.Item key="/owners">
+          <Link to="/owners">Owners</Link>
+        </Menu.Item>
+        <Menu.Item key="/create">
+          <Link to="/create">Create</Link>
+        </Menu.Item>
         <Menu.Item key="/debug">
           <Link to="/debug">Debug Contracts</Link>
         </Menu.Item>
@@ -324,12 +346,12 @@ function App(props) {
         <Menu.Item key="/exampleui">
           <Link to="/exampleui">ExampleUI</Link>
         </Menu.Item>
-        <Menu.Item key="/mainnetdai">
+        {/* <Menu.Item key="/mainnetdai">
           <Link to="/mainnetdai">Mainnet DAI</Link>
-        </Menu.Item>
-        <Menu.Item key="/subgraph">
+        </Menu.Item> */}
+        {/* <Menu.Item key="/subgraph">
           <Link to="/subgraph">Subgraph</Link>
-        </Menu.Item>
+        </Menu.Item> */}
       </Menu>
 
       <Switch>
@@ -346,6 +368,40 @@ function App(props) {
             price={price}
             mainnetProvider={mainnetProvider}
             blockExplorer={blockExplorer}
+          />
+        </Route>
+        <Route exact path="/owners">
+          <Owners
+            contractName={contractName}
+            address={address}
+            userProvider={userProvider}
+            mainnetProvider={mainnetProvider}
+            localProvider={localProvider}
+            yourLocalBalance={yourLocalBalance}
+            price={price}
+            tx={tx}
+            writeContracts={writeContracts}
+            readContracts={readContracts}
+            blockExplorer={blockExplorer}
+            ownerAddedEvents={ownerAddedEvents}
+            ownerRemovedEvents={ownerRemovedEvents}
+            signaturesRequired={signaturesRequired}
+          />
+        </Route>
+        <Route path="/create">
+          <CreateTransaction
+            poolServerUrl={poolServerUrl}
+            contractName={contractName}
+            address={address}
+            userProvider={userProvider}
+            mainnetProvider={mainnetProvider}
+            localProvider={localProvider}
+            yourLocalBalance={yourLocalBalance}
+            price={price}
+            tx={tx}
+            writeContracts={writeContracts}
+            readContracts={readContracts}
+            setRoute={setRoute}
           />
         </Route>
         <Route exact path="/debug">
@@ -409,14 +465,14 @@ function App(props) {
             />
             */}
         </Route>
-        <Route path="/subgraph">
+        {/* <Route path="/subgraph">
           <Subgraph
             subgraphUri={props.subgraphUri}
             tx={tx}
             writeContracts={writeContracts}
             mainnetProvider={mainnetProvider}
           />
-        </Route>
+        </Route> */}
       </Switch>
 
       <ThemeSwitch />

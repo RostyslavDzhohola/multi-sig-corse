@@ -25,4 +25,4 @@ export { default as NetworkSwitch } from "./NetworkSwitch";
 export { default as MultiAddressInput } from "./MultiAddressInput";
 export { default as TokenSelect } from "./TokenSelect";
 export { default as TransactionListItem } from "./TransactionListItem";
-export { default as TransactionDetailsModal} from "./TransactionDetailsModal";
+export { default as TransactionDetailsModal } from "./TransactionDetailsModal";
