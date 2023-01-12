@@ -390,7 +390,7 @@ function App(props) {
         </Route>
         <Route path="/create">
           <CreateTransaction
-            poolServerUrl={poolServerUrl}
+            // poolServerUrl={poolServerUrl}
             contractName={contractName}
             address={address}
             userProvider={userProvider}
