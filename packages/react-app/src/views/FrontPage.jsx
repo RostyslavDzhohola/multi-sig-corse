@@ -4,7 +4,8 @@ import { SyncOutlined } from "@ant-design/icons";
 import { parseEther, formatEther } from "@ethersproject/units";
 import { ethers } from "ethers";
 import QR from "qrcode.react";
-import { useContractReader, useEventListener, useLocalStorage, useLookupAddress } from "../hooks";
+import { useContractReader, useEventListener, useLocalStorage } from "../hooks";
+import { useResolveEnsAddress } from "eth-hooks/dapps";
 import { Address, AddressInput, Balance, Blockie, TransactionListItem } from "../components";
 
 const axios = require("axios");

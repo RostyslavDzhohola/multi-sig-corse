@@ -57,7 +57,7 @@ export default function MultiAddressInput(props) {
   }, [searchResults.length]);
 
   // const currentValue = typeof props.value !== "undefined" ? props.value : value;
-  // const ens = useLookupAddress(props.ensProvider, currentValue);
+  // const ens = useResolveEnsAddress(props.ensProvider, currentValue);
 
   const manageSearch = useCallback(
     async newValue => {

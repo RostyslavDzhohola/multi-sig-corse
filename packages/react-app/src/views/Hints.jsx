@@ -2,7 +2,7 @@ import { Select } from "antd";
 import React, { useState } from "react";
 import { utils } from "ethers";
 
-import { useTokenList } from "eth-hooks/dapps/dex";
+import { useDexTokenList } from "eth-hooks/dapps";
 import { Address, AddressInput } from "../components";
 
 const { Option } = Select;
@@ -10,7 +10,7 @@ const { Option } = Select;
 export default function Hints({ yourLocalBalance, mainnetProvider, price, address }) {
   // Get a list of tokens from a tokenlist -> see tokenlists.org!
   const [selectedToken, setSelectedToken] = useState("Pick a token!");
-  const listOfTokens = useTokenList(
+  const listOfTokens = useDexTokenList(
     "https://raw.githubusercontent.com/SetProtocol/uniswap-tokenlist/main/set.tokenlist.json",
   );
 
@@ -98,7 +98,7 @@ export default function Hints({ yourLocalBalance, mainnetProvider, price, addres
 
       <div style={{ margin: 8 }}>
         <div>
-          <b>useTokenList()</b> can get you an array of tokens from{" "}
+          <b>useDexTokenList()</b> can get you an array of tokens from{" "}
           <a href="https://tokenlists.org" target="_blank" rel="noopener noreferrer">
             tokenlists.org!
           </a>

@@ -1,5 +1,5 @@
 import { List } from "antd";
-import { useEventListener } from "eth-hooks/events/useEventListener";
+import { useEventListener } from "eth-hooks";
 import Address from "./Address";
 
 /**

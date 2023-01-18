@@ -1,7 +1,8 @@
 import { Button, Input, Form, Select, InputNumber, Table, Radio } from "antd";
 import React, { useState, useEffect } from "react";
 import { utils, ethers } from "ethers";
-import { useContractLoader, useOnBlock } from "eth-hooks";
+import { useContractLoader } from "eth-hooks";
+import useOnBlock from "../hooks/OnBlock";
 
 import { NETWORKS } from "../constants";
 import { Transactor } from "../helpers";
