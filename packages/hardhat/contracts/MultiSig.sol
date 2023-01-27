@@ -5,7 +5,7 @@ import "hardhat/console.sol";
 // import "@openzeppelin/contracts/access/Ownable.sol"; 
 // https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol
 
-contract MultiSig { 
+contract MultiSig {
   //events 
   event Deposit(address indexed sender, uint amount);
   event Submit(uint indexed txId);

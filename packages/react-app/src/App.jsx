@@ -162,13 +162,7 @@ function App(props) {
   const contractName = "MultiSig";
 
   // 📟 Listen for broadcast events
-  const executeTransactionEvents = useEventListener(
-    readContracts,
-    contractName,
-    "Execute",
-    localProvider,
-    1,
-  );
+  const executeTransactionEvents = useEventListener(readContracts, contractName, "Execute", localProvider, 1);
   if (DEBUG) console.log("📟 executeTransactionEvents:", executeTransactionEvents);
 
   // EXTERNAL CONTRACT EXAMPLE:
@@ -359,7 +353,7 @@ function App(props) {
           {/* pass in any web3 props to this Home component. For example, yourLocalBalance */}
           <Home yourLocalBalance={yourLocalBalance} readContracts={readContracts} />
         </Route>
-        <Route exact path="/frontPage">
+        {/* <Route exact path="/frontPage">
           <FrontPage
             executeTransactionEvents={executeTransactionEvents}
             contractName={contractName}
@@ -369,8 +363,8 @@ function App(props) {
             mainnetProvider={mainnetProvider}
             blockExplorer={blockExplorer}
           />
-        </Route>
-        <Route exact path="/owners">
+        </Route> */}
+        {/* <Route exact path="/owners">
           <Owners
             contractName={contractName}
             address={address}
@@ -387,8 +381,8 @@ function App(props) {
             ownerRemovedEvents={ownerRemovedEvents}
             signaturesRequired={signaturesRequired}
           />
-        </Route>
-        <Route path="/create">
+        </Route> */}
+        {/* <Route path="/create">
           <CreateTransaction
             // poolServerUrl={poolServerUrl}
             contractName={contractName}
@@ -403,7 +397,7 @@ function App(props) {
             readContracts={readContracts}
             setRoute={setRoute}
           />
-        </Route>
+        </Route> */}
         <Route exact path="/debug">
           {/*
                 🎛 this scaffolding is full of commonly used components
@@ -444,7 +438,7 @@ function App(props) {
           />
         </Route>
         <Route path="/mainnetdai">
-          <Contract
+          {/* <Contract
             name="DAI"
             customContract={mainnetContracts && mainnetContracts.contracts && mainnetContracts.contracts.DAI}
             signer={userSigner}
@@ -453,7 +447,7 @@ function App(props) {
             blockExplorer="https://etherscan.io/"
             contractConfig={contractConfig}
             chainId={1}
-          />
+          /> */}
           {/*
             <Contract
               name="UNI"
