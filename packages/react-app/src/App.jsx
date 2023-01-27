@@ -8,6 +8,7 @@ import {
   // useOnBlock,
   useUserProviderAndSigner,
 } from "eth-hooks";
+import { useEventListener } from "eth-hooks/events";
 import { useExchangeEthPrice } from "eth-hooks/dapps/dex";
 import React, { useCallback, useEffect, useState } from "react";
 import { Link, Route, Switch, useLocation } from "react-router-dom";
@@ -31,7 +32,7 @@ import deployedContracts from "./contracts/hardhat_contracts.json";
 import { getRPCPollTime, Transactor, Web3ModalSetup } from "./helpers";
 import { Home, ExampleUI, Hints, Subgraph, FrontPage, Owners, CreateTransaction } from "./views";
 // import { CreateTransaction, Transactions, Owners,  } from "./views";
-import { useStaticJsonRPC, useEventListener, useUserProvider } from "./hooks";
+import { useStaticJsonRPC, useUserProvider } from "./hooks";
 
 const { ethers } = require("ethers");
 /*
@@ -162,13 +163,7 @@ function App(props) {
   const contractName = "MultiSig";
 
   // 📟 Listen for broadcast events
-  const executeTransactionEvents = useEventListener(
-    readContracts,
-    contractName,
-    "Execute",
-    localProvider,
-    1,
-  );
+  const executeTransactionEvents = useEventListener(readContracts, contractName, "Execute", localProvider, 1);
   if (DEBUG) console.log("📟 executeTransactionEvents:", executeTransactionEvents);
 
   // EXTERNAL CONTRACT EXAMPLE:
@@ -390,7 +385,7 @@ function App(props) {
         </Route>
         <Route path="/create">
           <CreateTransaction
-            poolServerUrl={poolServerUrl}
+            // poolServerUrl={poolServerUrl}
             contractName={contractName}
             address={address}
             userProvider={userProvider}
