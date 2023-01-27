@@ -2,7 +2,6 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import React from "react";
 import { ThemeSwitcherProvider } from "react-css-theme-switcher";
 import { BrowserRouter } from "react-router-dom";
-import { EthersAppContext } from "eth-hooks/context";
 import ReactDOM from "react-dom";
 import App from "./App";
 import "./index.css";
@@ -25,11 +24,7 @@ ReactDOM.render(
   <ApolloProvider client={client}>
     <ThemeSwitcherProvider themeMap={themes} defaultTheme={prevTheme || "light"}>
       <BrowserRouter>
-        <ContractsAppContext>
-          <EthersAppContext>
-            <App subgraphUri={subgraphUri} />
-          </EthersAppContext>
-        </ContractsAppContext>
+        <App subgraphUri={subgraphUri} />
       </BrowserRouter>
     </ThemeSwitcherProvider>
   </ApolloProvider>,

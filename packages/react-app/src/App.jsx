@@ -1,7 +1,14 @@
 import { Button, Col, Menu, Row } from "antd";
 import "antd/dist/antd.css";
-import { useBalance, useContractLoader, useContractReader, useGasPrice, useEthersAdaptorFromProviderOrSigners } from "eth-hooks";
-import { useDexEthPrice } from "eth-hooks/dapps";
+import {
+  useBalance,
+  useContractLoader,
+  useContractReader,
+  useGasPrice,
+  // useOnBlock,
+  useUserProviderAndSigner,
+} from "eth-hooks";
+import { useExchangeEthPrice } from "eth-hooks/dapps/dex";
 import React, { useCallback, useEffect, useState } from "react";
 import { Link, Route, Switch, useLocation } from "react-router-dom";
 import "./App.css";
@@ -106,15 +113,14 @@ function App(props) {
   };
 
   /* 💵 This hook will get the price of ETH from 🦄 Uniswap: */
-  const price = useDexEthPrice(targetNetwork, mainnetProvider, mainnetProviderPollingTime);
+  const price = useExchangeEthPrice(targetNetwork, mainnetProvider, mainnetProviderPollingTime);
 
   /* 🔥 This hook will get the price of Gas from ⛽️ EtherGasStation */
   const gasPrice = useGasPrice(targetNetwork, "fast", localProviderPollingTime);
   // Use your injected provider from 🦊 Metamask or if you don't have it then instantly generate a 🔥 burner wallet.
   const userProvider = useUserProvider(injectedProvider, localProvider);
 
-  const [userProviderAndSigner] = useEthersAdaptorFromProviderOrSigners(localProvider);
-
+  const userProviderAndSigner = useUserProviderAndSigner(injectedProvider, localProvider, USE_BURNER_WALLET);
   const userSigner = userProviderAndSigner.signer;
 
   useEffect(() => {
