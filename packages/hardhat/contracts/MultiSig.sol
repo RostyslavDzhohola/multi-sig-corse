@@ -109,8 +109,8 @@ contract MultiSig {
 
     (bool success,bytes memory result) = transaction.to.call{value: transaction.value}(transaction.data);
     require(success, "Transaction failed");
+    nonce++;
     transaction.executed = true;
-    nonce += 1;
 
     emit Execute(msg.sender, _txId, transaction.to, transaction.value, transaction.data, result, nonce - 1);
   }
