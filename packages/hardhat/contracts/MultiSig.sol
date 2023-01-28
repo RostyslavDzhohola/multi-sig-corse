@@ -11,7 +11,8 @@ contract MultiSig {
   event Submit(uint indexed txId);
   event Approve(address indexed owner, uint indexed txId);
   event Revoke(address indexed owner, uint indexed txId);
-  event Execute(uint indexed txId);
+  event Execute( address indexed owner, uint indexed txId, address to, uint value, bytes data, bytes result, uint nonce);
+  // event ExecuteTransaction(address indexed owner, address payable to, uint256 value, bytes data, uint256 nonce, bytes32 hash, bytes result);
   event OwnerAdded(address indexed owner, bool added);
   event OwnerRemoved(address indexed owner, bool removed);
 
@@ -26,6 +27,7 @@ contract MultiSig {
   address[] public owners; // Mapping for owners who can execute transactions and sign them
   mapping(address => bool) public isOwnwer;
   uint public sigRequired;
+  uint public nonce = 0; // Nonce for execute transaction function
 
   Transaction[] public transactions;
   mapping(uint => mapping(address => bool)) public isConfirmed; // Mapping for checking if a transaction is confirmed by an owner
@@ -105,11 +107,12 @@ contract MultiSig {
 
     require(count >= sigRequired, "Not enough signatures");
 
-    (bool success, ) = transaction.to.call{value: transaction.value}(transaction.data);
+    (bool success,bytes memory result) = transaction.to.call{value: transaction.value}(transaction.data);
     require(success, "Transaction failed");
     transaction.executed = true;
+    nonce += 1;
 
-    emit Execute(_txId);
+    emit Execute(msg.sender, _txId, transaction.to, transaction.value, transaction.data, result, nonce - 1);
   }
 
   function _addSigner(address _newOwner, uint _sigRequired) public onlySelf {

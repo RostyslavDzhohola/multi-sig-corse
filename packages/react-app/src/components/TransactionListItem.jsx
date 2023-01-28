@@ -79,13 +79,15 @@ const TransactionListItem = function ({
               {txnData.args[0]}
             </p>
           </div>
-          {/* {<b style={{ padding: 16 }}>{typeof item.nonce === "number" ? item.nonce : item.nonce.toNumber()}</b>} */}
-          <span>{/* <Blockie size={4} scale={8} address={item.hash} /> {item.hash.substr(0, 6)} */}</span>
+          {<b style={{ padding: 16 }}>{typeof item.nonce === "number" ? item.nonce : item.nonce.toNumber()}</b>}
+          <span>
+            <Blockie size={4} scale={8} address={item.hash} /> {item.hash.substr(0, 6)}
+          </span>
           <Address address={item.to} ensProvider={mainnetProvider} blockExplorer={blockExplorer} fontSize={16} />
-          {/* <Balance
+          <Balance
             balance={item.value ? item.value : parseEther("" + parseFloat(item.amount).toFixed(12))}
             dollarMultiplier={price}
-          /> */}
+          />
           <>{children}</>
           <Button onClick={showModal}>
             <EllipsisOutlined />
