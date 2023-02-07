@@ -37,7 +37,7 @@ const TransactionListItem = function ({
     };
   };
 
-  console.log("🔥🔥🔥🔥", item);
+  console.log("🔥🔥🔥🔥 item object is => ", item);
   let txnData;
   try {
     txnData =
@@ -45,10 +45,13 @@ const TransactionListItem = function ({
         ? buildTxnTransferData(item)
         : readContracts[contractName].interface.parseTransaction(item);
   } catch (error) {
-    console.log("ERROR", error);
+    console.log("ERROR when buildTxnTransferData", error);
   }
   return (
     <>
+      <p>Test1 {txnData} </p>
+      <p>Test2 {item.data} </p>
+      <p>Test3 - {txnData} </p>
       <TransactionDetailsModal
         visible={isModalVisible}
         txnInfo={txnData}
