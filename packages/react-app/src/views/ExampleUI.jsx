@@ -156,8 +156,8 @@ export default function ExampleUI({
       */}
       <Events
         contracts={readContracts}
-        contractName="YourContract"
-        eventName="SetPurpose"
+        contractName="Multisig"
+        eventName="Execute"
         localProvider={localProvider}
         mainnetProvider={mainnetProvider}
         startBlock={1}

@@ -8,7 +8,7 @@ import {
   // useOnBlock,
   useUserProviderAndSigner,
 } from "eth-hooks";
-import { useEventListener } from "eth-hooks/events";
+import { useEventListener } from "eth-hooks/events/useEventListener";
 import { useExchangeEthPrice } from "eth-hooks/dapps/dex";
 import React, { useCallback, useEffect, useState } from "react";
 import { Link, Route, Switch, useLocation } from "react-router-dom";
@@ -164,7 +164,10 @@ function App(props) {
 
   // 📟 Listen for broadcast events
   const executeTransactionEvents = useEventListener(readContracts, contractName, "Execute", localProvider, 1);
-  if (DEBUG) console.log("📟 executeTransactionEvents:", executeTransactionEvents);
+  if (DEBUG) console.log("📟 executeTransactionEvents typeof:", executeTransactionEvents);
+  if (!Array.isArray(executeTransactionEvents)) {
+    console.error("Unexpected result from useEventListener:", executeTransactionEvents);
+  }
 
   // EXTERNAL CONTRACT EXAMPLE:
   //
@@ -188,11 +191,11 @@ function App(props) {
   // keep track of a variable from the contract in the local React state:
   const purpose = useContractReader(readContracts, "MultiSig", "purpose", [], localProviderPollingTime);
 
-  // 📟 Listen for owner events
+  // 📟 Listen for owner events\
   const ownerAddedEvents = useEventListener(readContracts, contractName, "OwnerAdded", localProvider, 1);
-  if (DEBUG) console.log("📟 ownerEvents:", ownerAddedEvents);
+  if (DEBUG) console.log("📟 ownerAddedEvents:", ownerAddedEvents);
   const ownerRemovedEvents = useEventListener(readContracts, contractName, "OwnerRemoved", localProvider, 1);
-  if (DEBUG) console.log("📟 ownerEvents:", ownerRemovedEvents);
+  if (DEBUG) console.log("📟 ownerRemovedEvents:", ownerRemovedEvents);
 
   // Keep the number of required signatures up to date
   const signaturesRequired = useContractReader(readContracts, contractName, "sigRequired");

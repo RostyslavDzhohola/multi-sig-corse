@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { Button, List } from "antd";
 
-import { Address, Balance, Blockie, TransactionDetailsModal } from "../components";
+import { Address, Balance, Blockie, TransactionDetailsModal, Events } from "../components";
 import { EllipsisOutlined } from "@ant-design/icons";
 import { parseEther, formatEther } from "@ethersproject/units";
 
 const TransactionListItem = function ({
   item,
   mainnetProvider,
+  localProvider,
   blockExplorer,
   price,
   readContracts,
@@ -39,19 +40,33 @@ const TransactionListItem = function ({
 
   console.log("🔥🔥🔥🔥 item object is => ", item);
   let txnData;
+  let data = "14de327f";
   try {
     txnData =
       item.data === "" || item.data === "0x" || item.data === "0x00"
         ? buildTxnTransferData(item)
         : readContracts[contractName].interface.parseTransaction(item);
+    // : readContracts[contractName].interface.parseTransaction(item); // try item.data
   } catch (error) {
-    console.log("ERROR when buildTxnTransferData", error);
+    console.log("ERROR when buildTxnTransferData ", error);
+    console.log("Contract name is ", contractName, "---> and readContracts is ", readContracts);
+    console.log("txnData is ", txnData);
   }
   return (
     <>
-      <p>Test1 {txnData} </p>
-      <p>Test2 {item.data} </p>
-      <p>Test3 - {txnData} </p>
+      <p>
+        {" "}
+        Event name --- {item.event} || Tx number {item.args.txId.toNumber()}{" "}
+      </p>
+
+      {/* <Events
+        contracts={readContracts}
+        contractName="MultiSig"
+        eventName="Execute"
+        localProvider={localProvider}
+        mainnetProvider={mainnetProvider}
+        startBlock={1}
+      /> */}
       <TransactionDetailsModal
         visible={isModalVisible}
         txnInfo={txnData}
